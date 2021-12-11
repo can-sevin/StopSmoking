@@ -1,11 +1,11 @@
 import React, { useState } from "react"
-import { Image, ImageBackground, Text, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
+import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../lang/_i18n'
 import LinearGradient from "react-native-linear-gradient"
 
 const FirstStep = (props: any) => {
-  const [perOfDay, setPerOfDay] = useState('')
+  const [perOfDay, setPerOfDay] = useState(0)
 
   const buttonClickedHandler = () => {
     props.navigation.navigate('SecondStep',{ perOfDay: perOfDay })
@@ -13,7 +13,7 @@ const FirstStep = (props: any) => {
 
   return (
     <>
-      <LinearGradient colors={ ['#ff6d44', '#DA224D'] } style={ styles.container }>
+      <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
         <Animatable.View animation='bounceInDown' style={ styles.inside_container }>
           <Text style={ styles.anim_text_middle }>
             { I18n.t('first_question') }
@@ -21,10 +21,10 @@ const FirstStep = (props: any) => {
           <View>
             <TextInput placeholderTextColor={ '#f5f5f5' } selectionColor={ '#f5f5f5' } placeholder='__' autoFocus={ true }
               maxLength={ 2 } keyboardType={ "number-pad" }
-              style={ styles.inputText } onChangeText={ (val) => setPerOfDay(val) }/>
+              style={ styles.inputText } onChangeText={ (val) => setPerOfDay(parseInt(val, 10)) }/>
           </View>
           <TouchableOpacity
-            disabled={ perOfDay === '' }
+            disabled={ perOfDay === 0 }
             onPress={ buttonClickedHandler }
             style={ styles.roundButton2 }>
             <Image style={ styles.button_img } source={ require('../../../assets/imgs/next.png') }/>
@@ -87,5 +87,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   }
 })
-
 export default FirstStep

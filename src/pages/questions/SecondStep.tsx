@@ -1,34 +1,35 @@
 import React, { useState } from "react"
-import { Image, ImageBackground, Text, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
+import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../lang/_i18n'
+import LinearGradient from "react-native-linear-gradient"
 
 const SecondStep = (props: any) => {
-  const [perOfBox, setPerOfBox] = useState('')
+  const [perOfBox, setPerOfBox] = useState(0)
 
   const buttonClickedHandler = () => {
-    props.navigation.navigate('ThirdStep',{ perOfDay: props.perOfDay, perOfBox: perOfBox })
+    props.navigation.navigate('ThirdStep',{ perOfDay: props.route.params.perOfDay, perOfBox: perOfBox })
   }
 
   return (
-    <ImageBackground source={ require('../../../assets/imgs/backback.png') } style={ styles.container }>
+    <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
       <Animatable.View animation='bounceInDown' style={ styles.inside_container }>
         <Text style={ styles.anim_text_middle }>
           { I18n.t('second_question') }
         </Text>
         <View>
-          <TextInput placeholder='__' autoFocus={ true }
+          <TextInput placeholderTextColor={ '#f5f5f5' } selectionColor={ '#f5f5f5' } placeholder='__' autoFocus={ true }
             maxLength={ 2 } keyboardType={ "number-pad" }
-            style={ styles.inputText } onChangeText={ (val) => setPerOfBox(val) }/>
+            style={ styles.inputText } onChangeText={ (val) => setPerOfBox(parseInt(val, 10)) }/>
         </View>
         <TouchableOpacity
-          disabled={ perOfBox === '' }
+          disabled={ perOfBox === 0 }
           onPress={ buttonClickedHandler }
           style={ styles.roundButton2 }>
           <Image style={ styles.button_img } source={ require('../../../assets/imgs/next.png') }/>
         </TouchableOpacity>
       </Animatable.View>
-    </ImageBackground>
+    </LinearGradient>
   )
 }
 
@@ -39,14 +40,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inside_container:{
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
     borderRadius: 16,
     height: 320,
     justifyContent: 'space-between',
   },
   anim_text_middle:{
     fontSize: 22,
-    color: '#323232',
+    color: '#f5f5f5',
     marginLeft: 20,
     textAlign: 'center',
     marginHorizontal: 8,
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     lineHeight: 64,
     padding: 10,
     fontFamily: 'Nunito-Bold',
-    color: '#323232',
+    color: '#f5f5f5',
     alignSelf: 'center',
     textAlign: 'center',
   }
