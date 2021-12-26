@@ -7,6 +7,7 @@ import LinearGradient from "react-native-linear-gradient"
 import RNMonthly from "react-native-monthly"
 import { captureRef } from "react-native-view-shot"
 import Share from "react-native-share"
+import { AppOpenAdProvider, BannerAd, BannerAdSize, TestIds } from "@react-native-admob/admob"
 
 const MainScreen = (props: any) => {
   const windowWidth = Dimensions.get('window').width
@@ -16,7 +17,7 @@ const MainScreen = (props: any) => {
   const [perOfBox, setPerOfBox] = useState(0)
   const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
   const [date, setDate] = useState(new Date())
-  const [labels, setLabels] = useState<string[]>([])
+  const [splashDismissed, setSplashDismissed] = useState(false)
 
   const setInfos = () => {
     storage
@@ -68,49 +69,60 @@ const MainScreen = (props: any) => {
   }
 
   return (
-    <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container } ref={ viewRef }>
-      <RNMonthly
-        numberOfDays={ 30 }
-        activeBackgroundColor="#2c2c2c"
-        inactiveBackgroundColor="#e1e1e1"
-        activeDays={ [1] }
-        style={ { width: windowWidth * 0.85 } }
-      />
-      <Animatable.Text style={ styles.anim_text_middle }
-        animation='bounceInLeft'
-      >
-        { I18n.t('first_onBoarding') }
-      </Animatable.Text>
-      <View style={ styles.text_double }>
-        <Text style={ styles.anim_text_middle }>
-          { I18n.t('branch') }
-        </Text>
-        <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-          { calculateOfBranches() }
-        </Text>
-      </View>
-      <View style={ styles.text_double }>
-        <Text style={ styles.anim_text_middle }>
-          { I18n.t('cost') }
-        </Text>
-        <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-          { calculateOfCost() + ' ' + I18n.t('currency') }
-        </Text>
-      </View>
-      <View style={ styles.text_double }>
-        <Text style={ styles.anim_text_middle }>
-          { I18n.t('day') }
-        </Text>
-        <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-          { I18n.t('day_day') + ' ' + calculateOfDays() }
-        </Text>
-      </View>
-      <TouchableOpacity onPress={ takeASnapshot }>
-        <Text style={ styles.anim_text_middle_big_semi }>
-          { I18n.t('share') }
-        </Text>
-      </TouchableOpacity>
-    </LinearGradient>
+    <AppOpenAdProvider
+      unitId={ TestIds.APP_OPEN }
+      options={ { showOnColdStart: true, loadOnDismissed: splashDismissed } }
+    >
+      <>
+        { splashDismissed ? (
+          <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
+            <RNMonthly
+              numberOfDays={ 30 }
+              activeBackgroundColor="#2c2c2c"
+              inactiveBackgroundColor="#e1e1e1"
+              activeDays={ [1] }
+              style={ { width: windowWidth * 0.9 } }
+            />
+            <Animatable.Text style={ styles.anim_text_middle }
+              animation='bounceInLeft'
+            >
+              { I18n.t('first_onBoarding') }
+            </Animatable.Text>
+            <View style={ styles.text_double }>
+              <Text style={ styles.anim_text_middle }>
+                { I18n.t('branch') }
+              </Text>
+              <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                { calculateOfBranches() }
+              </Text>
+            </View>
+            <View style={ styles.text_double }>
+              <Text style={ styles.anim_text_middle }>
+                { I18n.t('cost') }
+              </Text>
+              <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
+                { calculateOfCost() + ' ' + I18n.t('currency') }
+              </Text>
+            </View>
+            <View style={ styles.text_double }>
+              <Text style={ styles.anim_text_middle }>
+                { I18n.t('day') }
+              </Text>
+              <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
+                { I18n.t('day_day') + ' ' + calculateOfDays() }
+              </Text>
+            </View>
+            <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={ TestIds.BANNER } />
+            <TouchableOpacity onPress={ takeASnapshot }>
+              <Text style={ styles.anim_text_middle_big_semi }>
+                { I18n.t('share') }
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient> ) : (setSplashDismissed(true)) }
+      </>
+    </AppOpenAdProvider>
   )
 }
 
@@ -145,6 +157,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     paddingEnd: 16
+  },
+  banner:{
+    alignSelf: 'center',
+    margin: 24
   }
 })
 

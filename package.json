@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "cd ios && pod install && cd .. && react-native run-ios",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@freakycoder/react-native-bounceable": "^0.2.5",
+    "@react-native-admob/admob": "^2.0.0",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-firebase/app": "^12.9.3",
     "@react-navigation/native": "^6.0.6",
@@ -33,6 +34,8 @@
     "react-native-share": "^7.3.2",
     "react-native-storage": "^1.0.1",
     "react-native-svg": "^12.1.1",
+    "react-native-tracking-transparency": "^0.1.1",
+    "react-native-vector-icons": "^9.0.0",
     "react-native-view-shot": "^3.1.2"
   },
   "devDependencies": {
