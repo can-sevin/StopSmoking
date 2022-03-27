@@ -16,7 +16,7 @@ const SplashScreen = (props:any) => {
   const checkInfo = () => {
     AsyncStorage.getItem('infos')
       .then(ret => {
-        if(ret !== null)
+        if(ret === null)
           props.navigation.replace('Onboarding')
         else
           props.navigation.replace('MainScreen')

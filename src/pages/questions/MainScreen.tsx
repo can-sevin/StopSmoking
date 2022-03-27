@@ -11,12 +11,14 @@ import { AppOpenAdProvider, BannerAd, BannerAdSize, TestIds } from "@react-nativ
 
 const MainScreen = (props: any) => {
   const windowWidth = Dimensions.get('window').width
-  const nowDate = new Date()
+  const nowDate = new Date().getDate()
+  const nowMonth = new Date().getMonth()
+  const nowYear = new Date().getFullYear()
   const colors = ['#e1e1e1','#7e7e7e','#515151','#2c2c2c']
   const [perOfDay, setPerOfDay] = useState(0)
   const [perOfBox, setPerOfBox] = useState(0)
   const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState<any>('')
   const [splashDismissed, setSplashDismissed] = useState(false)
 
   const setInfos = () => {
@@ -27,7 +29,9 @@ const MainScreen = (props: any) => {
         setPerOfBox(it.perOfBox)
         setPerOfBoxPrice(it.perOfBoxPrice)
         setDate(it.date)
+        console.log('Top Date', it.date)
       })
+    console.log('Top Middle Date', date)
   }
 
   const viewRef = useRef()
@@ -37,15 +41,16 @@ const MainScreen = (props: any) => {
   },[])
 
   const getMonthOfDayNumber = () => {
-    return new Date(nowDate.getFullYear(), nowDate.getMonth() + 1,0).getDate()
+    return new Date(nowYear, nowMonth + 1,0).getDate()
   }
 
   const getDifferenceOfDays = () => {
-    return Array.from({ length: nowDate.getDate() - date.getDate() }, (_, i) => i+1)
+    return Array.from({ length: nowDate - date }, (_, i) => i+1)
   }
 
   const calculateOfDays = () => {
-    return nowDate.getDate() - date.getDate()
+    console.log('Time', date, nowDate)
+    return nowDate - date
   }
 
   const calculateOfBranches = () => {

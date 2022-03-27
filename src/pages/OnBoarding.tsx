@@ -1,7 +1,9 @@
-import React, { Component, useState } from "react"
-import { Image, ImageBackground, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native"
-import * as Animatable from 'react-native-animatable'
+import React, { useRef } from "react"
+import { Dimensions, Image, StyleSheet, TouchableOpacity, Animated, Text, Easing } from "react-native"
 import I18n from '../lang/_i18n'
+import LinearGradient from "react-native-linear-gradient"
+
+const dimensions = Dimensions.get('window')
 
 const OnBoarding = (props:any) => {
   const buttonClickedHandler = () => {
@@ -9,37 +11,41 @@ const OnBoarding = (props:any) => {
     props.navigation.navigate('FirstStep')
   }
 
+  const bottomAnim = useRef(new Animated.Value(0)).current
+
+  const fadeIn = () => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(bottomAnim, {
+      delay: 2500, easing: Easing.bounce, isInteraction: undefined,
+      useNativeDriver: true,
+      toValue: 0.4,
+      duration: 2500
+    }).start()
+  }
+
   return (
-    <ImageBackground source={ require('../../assets/imgs/backback.png') } style={ styles.container }>
-      <Animatable.View animation='bounceInDown' style={ styles.inside_container }>
-        <Animatable.Text style={ styles.anim_text_top }
-          animation='bounceInLeft'
-          delay={ 500 }
-        >
+    <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
+      <Animated.Image style={ styles.logo } source={ require('../../assets/imgs/cigar.png') }/>
+      <Animated.View animation='bounceInDown' style={ styles.inside_container }>
+        <Text style={ styles.anim_text_top }>
           { I18n.t('first_onBoarding') }
-        </Animatable.Text>
-        <Animatable.Text style={ styles.anim_text_middle }
-          animation='bounceInLeft'
-          delay={ 800 }>
+        </Text>
+        <Text style={ styles.anim_text_middle }>
           { I18n.t('second_onBoarding') }
-        </Animatable.Text>
-        <Animatable.Text style={ styles.anim_text_middle }
-          animation='bounceInLeft'
-          delay={ 1200 }>
+        </Text>
+        <Text style={ styles.anim_text_middle }>
           { I18n.t('third_onBoarding') }
-        </Animatable.Text>
-        <Animatable.Text style={ styles.anim_text_bottom }
-          animation='bounceInLeft'
-          delay={ 1600 }>
+        </Text>
+        <Text style={ styles.anim_text_bottom }>
           { I18n.t('forth_onBoarding') }
-        </Animatable.Text>
+        </Text>
         <TouchableOpacity
           onPress={ buttonClickedHandler }
           style={ styles.roundButton2 }>
           <Image style={ styles.button_img } source={ require('../../assets/imgs/next.png') }/>
         </TouchableOpacity>
-      </Animatable.View>
-    </ImageBackground>
+      </Animated.View>
+    </LinearGradient>
   )
 }
 
@@ -48,13 +54,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#212121',
     justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  logo:{
+    height: 96,
+    width: 96,
+    alignSelf: "center",
+    marginBottom: dimensions.height * 0.036
   },
   inside_container:{
     backgroundColor: '#FFFFFF',
     borderRadius: 16
   },
   anim_text_top:{
-    fontSize: 32,
+    fontSize: dimensions.height * 0.036,
     color: '#323232',
     marginLeft: 18,
     marginTop: 48,
@@ -63,7 +76,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   anim_text_middle:{
-    fontSize: 16,
+    fontSize: dimensions.height * 0.024,
     color: '#323232',
     marginLeft: 20,
     marginVertical: 12,
@@ -71,7 +84,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   anim_text_bottom:{
-    fontSize: 16,
+    fontSize: dimensions.height * 0.024,
     color: '#323232',
     marginLeft: 20,
     marginTop: 24,
@@ -81,8 +94,8 @@ const styles = StyleSheet.create({
   },
   roundButton2: {
     margin: 20,
-    width: 56,
-    height: 56,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'flex-end',
@@ -93,8 +106,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   button_img:{
-    height: 36,
-    width: 36
+    height: 28,
+    width: 28
   }
 })
 
