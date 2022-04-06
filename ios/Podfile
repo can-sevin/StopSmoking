@@ -17,6 +17,8 @@ target 'StopSmoking' do
   $RNAdMobAsStaticFramework = true
   pod 'Google-Mobile-Ads-SDK'
 
+  pod 'react-native-view-shot', :path => '../node_modules/react-native-view-shot'
+
   target 'StopSmokingTests' do
     inherit! :complete
     # Pods for testing

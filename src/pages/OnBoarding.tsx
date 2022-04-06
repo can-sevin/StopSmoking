@@ -1,32 +1,25 @@
-import React, { useRef } from "react"
-import { Dimensions, Image, StyleSheet, TouchableOpacity, Animated, Text, Easing } from "react-native"
+import React from "react"
+import { Image, StyleSheet, TouchableOpacity, Text, View } from "react-native"
 import I18n from '../lang/_i18n'
-import LinearGradient from "react-native-linear-gradient"
-
-const dimensions = Dimensions.get('window')
+import Video from "react-native-video"
 
 const OnBoarding = (props:any) => {
   const buttonClickedHandler = () => {
-    console.log('You have been clicked a button!')
     props.navigation.navigate('FirstStep')
   }
 
-  const bottomAnim = useRef(new Animated.Value(0)).current
-
-  const fadeIn = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(bottomAnim, {
-      delay: 2500, easing: Easing.bounce, isInteraction: undefined,
-      useNativeDriver: true,
-      toValue: 0.4,
-      duration: 2500
-    }).start()
-  }
-
   return (
-    <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
-      <Animated.Image style={ styles.logo } source={ require('../../assets/imgs/cigar.png') }/>
-      <Animated.View animation='bounceInDown' style={ styles.inside_container }>
+    <View style={ styles.container }>
+      <>
+        <Video
+          repeat
+          resizeMode={ 'cover' }
+          style={ styles.video }
+          muted
+          source={ require('../../assets/imgs/pexels.mp4') }
+        />
+      </>
+      <>
         <Text style={ styles.anim_text_top }>
           { I18n.t('first_onBoarding') }
         </Text>
@@ -44,53 +37,50 @@ const OnBoarding = (props:any) => {
           style={ styles.roundButton2 }>
           <Image style={ styles.button_img } source={ require('../../assets/imgs/next.png') }/>
         </TouchableOpacity>
-      </Animated.View>
-    </LinearGradient>
+      </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#212121',
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
-  logo:{
-    height: 96,
-    width: 96,
-    alignSelf: "center",
-    marginBottom: dimensions.height * 0.036
-  },
-  inside_container:{
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16
+  video:{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
   anim_text_top:{
-    fontSize: dimensions.height * 0.036,
-    color: '#323232',
-    marginLeft: 18,
+    fontSize: 32,
+    textAlign: 'center',
+    color: '#f5f5f5',
     marginTop: 48,
     marginBottom: 24,
     fontFamily: 'Nunito-SemiBold',
-    alignSelf: 'flex-start',
+    alignSelf: 'center'
   },
   anim_text_middle:{
-    fontSize: dimensions.height * 0.024,
-    color: '#323232',
-    marginLeft: 20,
+    fontSize: 18,
+    color: '#f5f5f5',
     marginVertical: 12,
+    textAlign: 'center',
     fontFamily: 'Nunito-Bold',
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
   },
   anim_text_bottom:{
-    fontSize: dimensions.height * 0.024,
-    color: '#323232',
-    marginLeft: 20,
+    fontSize: 18,
+    color: '#f5f5f5',
     marginTop: 24,
     fontFamily: 'Nunito-Bold',
     marginBottom: 24,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
+    textAlign: 'center',
   },
   roundButton2: {
     margin: 20,
@@ -100,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     padding: 10,
-    borderColor: '#323232',
+    borderColor: '#f5f5f5',
     borderWidth: 0.2,
     borderRadius: 100,
     backgroundColor: '#f5f5f5',

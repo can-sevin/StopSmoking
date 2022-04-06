@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../lang/_i18n'
-import LinearGradient from "react-native-linear-gradient"
+import Video from "react-native-video"
 
 const SecondStep = (props: any) => {
   const [perOfBox, setPerOfBox] = useState(0)
@@ -12,24 +12,35 @@ const SecondStep = (props: any) => {
   }
 
   return (
-    <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
-      <Animatable.View animation='bounceInDown' style={ styles.inside_container }>
-        <Text style={ styles.anim_text_middle }>
-          { I18n.t('second_question') }
-        </Text>
-        <View>
-          <TextInput placeholderTextColor={ '#f5f5f5' } selectionColor={ '#f5f5f5' } placeholder='__' autoFocus={ true }
-            maxLength={ 2 } keyboardType={ "number-pad" }
-            style={ styles.inputText } onChangeText={ (val) => setPerOfBox(parseInt(val, 10)) }/>
-        </View>
-        <TouchableOpacity
-          disabled={ perOfBox === 0 }
-          onPress={ buttonClickedHandler }
-          style={ styles.roundButton2 }>
-          <Image style={ styles.button_img } source={ require('../../../assets/imgs/next.png') }/>
-        </TouchableOpacity>
-      </Animatable.View>
-    </LinearGradient>
+    <View style={ styles.container }>
+      <>
+        <Video
+          repeat
+          resizeMode={ 'cover' }
+          style={ styles.video }
+          muted
+          source={ require('../../../assets/imgs/pexels.mp4') }
+        />
+      </>
+      <>
+        <Animatable.View animation='bounceInDown' style={ styles.inside_container }>
+          <Text style={ styles.anim_text_middle }>
+            { I18n.t('second_question') }
+          </Text>
+          <View>
+            <TextInput placeholderTextColor={ '#f5f5f5' } selectionColor={ '#f5f5f5' } placeholder='__' autoFocus={ true }
+              maxLength={ 2 } keyboardType={ "number-pad" }
+              style={ styles.inputText } onChangeText={ (val) => setPerOfBox(parseInt(val, 10)) }/>
+          </View>
+          <TouchableOpacity
+            disabled={ perOfBox === 0 }
+            onPress={ buttonClickedHandler }
+            style={ styles.roundButton2 }>
+            <Image style={ styles.button_img } source={ require('../../../assets/imgs/next.png') }/>
+          </TouchableOpacity>
+        </Animatable.View>
+      </>
+    </View>
   )
 }
 
@@ -38,6 +49,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#212121',
     justifyContent: 'center',
+  },
+  video:{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
   inside_container:{
     backgroundColor: 'transparent',
