@@ -1,9 +1,9 @@
 import React, { useState } from "react"
-import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
+import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View, SafeAreaView, StatusBar } from "react-native"
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../lang/_i18n'
 import { storage } from "../../../App"
-import Video from "react-native-video";
+import Video from "react-native-video"
 
 const ThirdStep = (props: any) => {
   const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
@@ -25,7 +25,8 @@ const ThirdStep = (props: any) => {
   }
 
   return (
-    <View style={ styles.container }>
+    <SafeAreaView style={ styles.container }>
+      <StatusBar translucent backgroundColor="transparent" />
       <>
         <Video
           repeat
@@ -53,7 +54,7 @@ const ThirdStep = (props: any) => {
           </TouchableOpacity>
         </Animatable.View>
       </>
-    </View>
+    </SafeAreaView>
   )
 }
 

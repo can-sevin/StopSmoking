@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react"
-import { Dimensions, StyleSheet, View, Text, TouchableOpacity, Platform, Linking, Image } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  Linking,
+  Image,
+  StatusBar, SafeAreaView
+} from "react-native"
 import I18n from "../../lang/_i18n"
 import * as Animatable from "react-native-animatable"
 import { storage } from "../../../App"
 import LinearGradient from "react-native-linear-gradient"
 import RNMonthly from "react-native-monthly"
-import ViewShot, { captureRef } from "react-native-view-shot"
-import Share from "react-native-share"
+import ViewShot, { captureRef } from 'react-native-view-shot'
+import Share from 'react-native-share'
 import { AppOpenAdProvider, BannerAd, BannerAdSize, TestIds } from "@react-native-admob/admob"
 
 const MainScreen = () => {
@@ -87,67 +97,73 @@ const MainScreen = () => {
   }
 
   return (
-    <AppOpenAdProvider
-      unitId={ TestIds.APP_OPEN }
-      options={ { showOnColdStart: true, loadOnDismissed: splashDismissed } }
-    >
-      <>
-        { splashDismissed ? (
-          <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
-            <ViewShot ref={ shotRef }>
-              <Image style={ styles.logo } source={ require('../../../assets/imgs/logo_new.png') }/>
-              <RNMonthly
-                numberOfDays={ 30 }
-                activeBackgroundColor="#2c2c2c"
-                inactiveBackgroundColor="#e1e1e1"
-                activeDays={ [1] }
-                style={ { width: windowWidth * 0.9 } }
-              />
-              <Animatable.Text style={ styles.anim_text_middle }
-                animation='bounceInLeft'
-              >
-                { I18n.t('first_onBoarding') }
-              </Animatable.Text>
-              <View style={ styles.text_double }>
-                <Text style={ styles.anim_text_middle }>
-                  { I18n.t('branch') }
+    <SafeAreaView style={ styles.top_container }>
+      <StatusBar translucent backgroundColor="transparent" />
+      <AppOpenAdProvider
+        unitId={ TestIds.APP_OPEN }
+        options={ { showOnColdStart: true, loadOnDismissed: splashDismissed } }
+      >
+        <>
+          { splashDismissed ? (
+            <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
+              <ViewShot ref={ shotRef }>
+                <Image style={ styles.logo } source={ require('../../../assets/imgs/logo_new.png') }/>
+                <RNMonthly
+                  numberOfDays={ 30 }
+                  activeBackgroundColor="#2c2c2c"
+                  inactiveBackgroundColor="#e1e1e1"
+                  activeDays={ [1] }
+                  style={ { width: windowWidth * 0.9 } }
+                />
+                <Animatable.Text style={ styles.anim_text_middle }
+                  animation='bounceInLeft'
+                >
+                  { I18n.t('first_onBoarding') }
+                </Animatable.Text>
+                <View style={ styles.text_double }>
+                  <Text style={ styles.anim_text_middle }>
+                    { I18n.t('branch') }
+                  </Text>
+                  <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                    { calculateOfBranches() }
+                  </Text>
+                </View>
+                <View style={ styles.text_double }>
+                  <Text style={ styles.anim_text_middle }>
+                    { I18n.t('cost') }
+                  </Text>
+                  <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                    { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
+                    { calculateOfCost() + ' ' + I18n.t('currency') }
+                  </Text>
+                </View>
+                <View style={ styles.text_double }>
+                  <Text style={ styles.anim_text_middle }>
+                    { I18n.t('day') }
+                  </Text>
+                  <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                    { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
+                    { I18n.t('day_day') + ' ' + calculateOfDays() }
+                  </Text>
+                </View>
+              </ViewShot>
+              <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={ TestIds.BANNER } />
+              <TouchableOpacity onPress={ takeASnapshot }>
+                <Text style={ styles.anim_text_middle_big_semi }>
+                  { showInstagramStory ? 'Instagram Story ' + I18n.t('share') :I18n.t('share') }
                 </Text>
-                <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-                  { calculateOfBranches() }
-                </Text>
-              </View>
-              <View style={ styles.text_double }>
-                <Text style={ styles.anim_text_middle }>
-                  { I18n.t('cost') }
-                </Text>
-                <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-                  { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                  { calculateOfCost() + ' ' + I18n.t('currency') }
-                </Text>
-              </View>
-              <View style={ styles.text_double }>
-                <Text style={ styles.anim_text_middle }>
-                  { I18n.t('day') }
-                </Text>
-                <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-                  { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                  { I18n.t('day_day') + ' ' + calculateOfDays() }
-                </Text>
-              </View>
-            </ViewShot>
-            <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={ TestIds.BANNER } />
-            <TouchableOpacity onPress={ takeASnapshot }>
-              <Text style={ styles.anim_text_middle_big_semi }>
-                { showInstagramStory ? 'Instagram Story ' + I18n.t('share') :I18n.t('share') }
-              </Text>
-            </TouchableOpacity>
-          </LinearGradient> ) : (setSplashDismissed(true)) }
-      </>
-    </AppOpenAdProvider>
+              </TouchableOpacity>
+            </LinearGradient> ) : (setSplashDismissed(true)) }
+        </>
+      </AppOpenAdProvider>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  top_container: {
+    flex: 1
+  },
   container: {
     flex: 1,
     backgroundColor: '#212121',

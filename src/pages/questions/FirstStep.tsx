@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View } from "react-native"
+import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View, StatusBar, SafeAreaView } from "react-native"
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../lang/_i18n'
 import Video from "react-native-video"
@@ -13,7 +13,8 @@ const FirstStep = (props: any) => {
 
   return (
     <>
-      <View style={ styles.container }>
+      <SafeAreaView style={ styles.container }>
+        <StatusBar translucent backgroundColor="transparent" />
         <>
           <Video
             repeat
@@ -41,7 +42,7 @@ const FirstStep = (props: any) => {
             </TouchableOpacity>
           </Animatable.View>
         </>
-      </View>
+      </SafeAreaView>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Animated, Image, StyleSheet } from "react-native"
+import { Animated, StatusBar, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Storage from "react-native-storage"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -36,6 +36,7 @@ const SplashScreen = (props:any) => {
 
   return (
     <>
+      <StatusBar translucent backgroundColor="transparent" />
       <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
         <Animated.Image onLoad={ onLoad } style={ [{
           opacity: opacity,
