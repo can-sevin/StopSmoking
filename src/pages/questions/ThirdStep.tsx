@@ -1,12 +1,12 @@
 import React, { useState } from "react"
-import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View, SafeAreaView, StatusBar } from "react-native"
+import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View, StatusBar } from "react-native"
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../lang/_i18n'
 import { storage } from "../../../App"
 import Video from "react-native-video"
 
 const ThirdStep = (props: any) => {
-  const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
+  const [perOfBox, setPerOfBox] = useState(0)
   const date = new Date()
 
   const buttonClickedHandler = () => {
@@ -14,18 +14,20 @@ const ThirdStep = (props: any) => {
       key: 'infos',
       data: {
         perOfDay: props.route.params.perOfDay,
-        perOfBox: props.route.params.perOfBox,
-        perOfBoxPrice: perOfBoxPrice,
-        date: date.getDate()
+        perOfBox: perOfBox,
+        perOfBoxPrice: props.route.params.perOfBoxPrice,
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate()
       }
     })
     props.navigation.replace('MainScreen',{
-      perOfDay: props.route.params.perOfDay, perOfBox: props.route.params.perOfBox, perOfBoxPrice: perOfBoxPrice
+      perOfDay: props.route.params.perOfDay, perOfBoxPrice: props.route.params.perOfBoxPrice, perOfBox: perOfBox
     })
   }
 
   return (
-    <SafeAreaView style={ styles.container }>
+    <View style={ styles.container }>
       <StatusBar translucent backgroundColor="transparent" />
       <>
         <Video
@@ -44,17 +46,17 @@ const ThirdStep = (props: any) => {
           <View>
             <TextInput placeholderTextColor={ '#f5f5f5' } selectionColor={ '#f5f5f5' } placeholder='__' autoFocus={ true }
               maxLength={ 2 } keyboardType={ "number-pad" }
-              style={ styles.inputText } onChangeText={ (val) => setPerOfBoxPrice(parseInt(val, 10)) } />
+              style={ styles.inputText } onChangeText={ (val) => setPerOfBox(parseInt(val, 10)) } />
           </View>
           <TouchableOpacity
-            disabled={ perOfBoxPrice === 0 }
+            disabled={ perOfBox === 0 }
             onPress={ buttonClickedHandler }
             style={ styles.roundButton2 }>
             <Image style={ styles.button_img } source={ require('../../../assets/imgs/next.png') }/>
           </TouchableOpacity>
         </Animatable.View>
       </>
-    </SafeAreaView>
+    </View>
   )
 }
 

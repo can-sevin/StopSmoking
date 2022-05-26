@@ -1,4 +1,4 @@
-package com.stopsmoking;
+package com.mahmutcansevin.stopsmoking;
 
 import android.os.Bundle;
 

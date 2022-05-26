@@ -1,5 +1,5 @@
 import React from "react"
-import { Image, StyleSheet, TouchableOpacity, Text, SafeAreaView, StatusBar } from "react-native"
+import { Image, StyleSheet, TouchableOpacity, Text, View, StatusBar } from "react-native"
 import I18n from '../lang/_i18n'
 import Video from "react-native-video"
 
@@ -9,7 +9,7 @@ const OnBoarding = (props:any) => {
   }
 
   return (
-    <SafeAreaView style={ styles.container }>
+    <View style={ styles.container }>
       <StatusBar translucent backgroundColor="transparent" />
       <>
         <Video
@@ -39,7 +39,7 @@ const OnBoarding = (props:any) => {
           <Image style={ styles.button_img } source={ require('../../assets/imgs/next.png') }/>
         </TouchableOpacity>
       </>
-    </SafeAreaView>
+    </View>
   )
 }
 

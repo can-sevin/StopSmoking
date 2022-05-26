@@ -8,11 +8,11 @@ import {
   Platform,
   Linking,
   Image,
-  StatusBar, SafeAreaView
+  StatusBar
 } from "react-native"
-import I18n from "../../lang/_i18n"
+import I18n from "../lang/_i18n"
 import * as Animatable from "react-native-animatable"
-import { storage } from "../../../App"
+import { storage } from "../../App"
 import LinearGradient from "react-native-linear-gradient"
 import RNMonthly from "react-native-monthly"
 import ViewShot, { captureRef } from 'react-native-view-shot'
@@ -24,10 +24,13 @@ const MainScreen = () => {
   const nowDate = new Date().getDate()
   const nowMonth = new Date().getMonth()
   const nowYear = new Date().getFullYear()
+  const nowDay = new Date().getDay()
   const [perOfDay, setPerOfDay] = useState(0)
   const [perOfBox, setPerOfBox] = useState(0)
   const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
-  const [date, setDate] = useState<any>('')
+  const [year, setYear] = useState(0)
+  const [month, setMonth] = useState(0)
+  const [day, setDay] = useState(0)
   const [splashDismissed, setSplashDismissed] = useState(false)
   const [showInstagramStory, setShowInstagramStory] = useState(false)
 
@@ -38,15 +41,17 @@ const MainScreen = () => {
         setPerOfDay(it.perOfDay)
         setPerOfBox(it.perOfBox)
         setPerOfBoxPrice(it.perOfBoxPrice)
-        setDate(it.date)
+        setYear(it.year)
+        setMonth(it.month)
+        setDay(it.day)
+        console.log('Infos:', it.perOfDay, it.perOfBox, it.perOfBoxPrice)
+        console.log('Dates:', it.year, it.month, it.day)
       })
   }
-
   const shotRef = React.createRef<ViewShot>()
 
   useEffect(() =>{
     setInfos()
-
     if(Platform.OS === 'ios'){
       Linking.canOpenURL('instagram://').then((val) => setShowInstagramStory(val))
     } else {
@@ -59,11 +64,11 @@ const MainScreen = () => {
   }
 
   const getDifferenceOfDays = () => {
-    return Array.from({ length: nowDate - date }, (_, i) => i+1)
+    return Array.from({ length: nowDate }, (_, i) => i+1)
   }
 
   const calculateOfDays = () => {
-    return nowDate - date
+    return nowDate
   }
 
   const calculateOfBranches = () => {
@@ -97,66 +102,68 @@ const MainScreen = () => {
   }
 
   return (
-    <SafeAreaView style={ styles.top_container }>
+    <>
       <StatusBar translucent backgroundColor="transparent" />
-      <AppOpenAdProvider
-        unitId={ TestIds.APP_OPEN }
-        options={ { showOnColdStart: true, loadOnDismissed: splashDismissed } }
-      >
-        <>
-          { splashDismissed ? (
-            <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
-              <ViewShot ref={ shotRef }>
-                <Image style={ styles.logo } source={ require('../../../assets/imgs/logo_new.png') }/>
-                <RNMonthly
-                  numberOfDays={ 30 }
-                  activeBackgroundColor="#2c2c2c"
-                  inactiveBackgroundColor="#e1e1e1"
-                  activeDays={ [1] }
-                  style={ { width: windowWidth * 0.9 } }
-                />
-                <Animatable.Text style={ styles.anim_text_middle }
-                  animation='bounceInLeft'
-                >
-                  { I18n.t('first_onBoarding') }
-                </Animatable.Text>
-                <View style={ styles.text_double }>
-                  <Text style={ styles.anim_text_middle }>
-                    { I18n.t('branch') }
+      <View style={ styles.top_container }>
+        <AppOpenAdProvider
+          unitId={ TestIds.APP_OPEN }
+          options={ { showOnColdStart: true, loadOnDismissed: splashDismissed } }
+        >
+          <>
+            { splashDismissed ? (
+              <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
+                <ViewShot ref={ shotRef }>
+                  <Image style={ styles.logo } source={ require('../../assets/imgs/logo_new.png') }/>
+                  <RNMonthly
+                    numberOfDays={ 30 }
+                    activeBackgroundColor="#2c2c2c"
+                    inactiveBackgroundColor="#e1e1e1"
+                    activeDays={ [1] }
+                    style={ { width: windowWidth * 0.9 } }
+                  />
+                  <Animatable.Text style={ styles.anim_text_middle }
+                    animation='bounceInLeft'
+                  >
+                    { I18n.t('first_onBoarding') }
+                  </Animatable.Text>
+                  <View style={ styles.text_double }>
+                    <Text style={ styles.anim_text_middle }>
+                      { I18n.t('branch') }
+                    </Text>
+                    <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                      { calculateOfBranches() }
+                    </Text>
+                  </View>
+                  <View style={ styles.text_double }>
+                    <Text style={ styles.anim_text_middle }>
+                      { I18n.t('cost') }
+                    </Text>
+                    <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                      { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
+                      { calculateOfCost() + ' ' + I18n.t('currency') }
+                    </Text>
+                  </View>
+                  <View style={ styles.text_double }>
+                    <Text style={ styles.anim_text_middle }>
+                      { I18n.t('day') }
+                    </Text>
+                    <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                      { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
+                      { I18n.t('day_day') + ' ' + calculateOfDays() }
+                    </Text>
+                  </View>
+                </ViewShot>
+                <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={ TestIds.BANNER } />
+                <TouchableOpacity onPress={ takeASnapshot }>
+                  <Text style={ styles.anim_text_middle_big_semi }>
+                    { showInstagramStory ? 'Instagram Story ' + I18n.t('share') :I18n.t('share') }
                   </Text>
-                  <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-                    { calculateOfBranches() }
-                  </Text>
-                </View>
-                <View style={ styles.text_double }>
-                  <Text style={ styles.anim_text_middle }>
-                    { I18n.t('cost') }
-                  </Text>
-                  <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-                    { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                    { calculateOfCost() + ' ' + I18n.t('currency') }
-                  </Text>
-                </View>
-                <View style={ styles.text_double }>
-                  <Text style={ styles.anim_text_middle }>
-                    { I18n.t('day') }
-                  </Text>
-                  <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-                    { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                    { I18n.t('day_day') + ' ' + calculateOfDays() }
-                  </Text>
-                </View>
-              </ViewShot>
-              <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={ TestIds.BANNER } />
-              <TouchableOpacity onPress={ takeASnapshot }>
-                <Text style={ styles.anim_text_middle_big_semi }>
-                  { showInstagramStory ? 'Instagram Story ' + I18n.t('share') :I18n.t('share') }
-                </Text>
-              </TouchableOpacity>
-            </LinearGradient> ) : (setSplashDismissed(true)) }
-        </>
-      </AppOpenAdProvider>
-    </SafeAreaView>
+                </TouchableOpacity>
+              </LinearGradient> ) : (setSplashDismissed(true)) }
+          </>
+        </AppOpenAdProvider>
+      </View>
+    </>
   )
 }
 

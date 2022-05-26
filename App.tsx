@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import FirstStep from "./src/pages/questions/FirstStep"
 import SecondStep from "./src/pages/questions/SecondStep"
 import ThirdStep from "./src/pages/questions/ThirdStep"
-import MainScreen from "./src/pages/questions/MainScreen"
+import MainScreen from "./src/pages/MainScreen"
 import Storage from 'react-native-storage'
 import AsyncStorage from '@react-native-community/async-storage'
 

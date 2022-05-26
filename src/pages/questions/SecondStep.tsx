@@ -1,18 +1,18 @@
 import React, { useState } from "react"
-import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View, SafeAreaView, StatusBar } from "react-native"
+import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View, StatusBar } from "react-native"
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../lang/_i18n'
 import Video from "react-native-video"
 
 const SecondStep = (props: any) => {
-  const [perOfBox, setPerOfBox] = useState(0)
+  const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
 
   const buttonClickedHandler = () => {
-    props.navigation.navigate('ThirdStep',{ perOfDay: props.route.params.perOfDay, perOfBox: perOfBox })
+    props.navigation.navigate('ThirdStep',{ perOfDay: props.route.params.perOfDay, perOfBoxPrice: perOfBoxPrice })
   }
 
   return (
-    <SafeAreaView style={ styles.container }>
+    <View style={ styles.container }>
       <StatusBar translucent backgroundColor="transparent" />
       <>
         <Video
@@ -31,17 +31,17 @@ const SecondStep = (props: any) => {
           <View>
             <TextInput placeholderTextColor={ '#f5f5f5' } selectionColor={ '#f5f5f5' } placeholder='__' autoFocus={ true }
               maxLength={ 2 } keyboardType={ "number-pad" }
-              style={ styles.inputText } onChangeText={ (val) => setPerOfBox(parseInt(val, 10)) }/>
+              style={ styles.inputText } onChangeText={ (val) => setPerOfBoxPrice(parseInt(val, 10)) }/>
           </View>
           <TouchableOpacity
-            disabled={ perOfBox === 0 }
+            disabled={ perOfBoxPrice === 0 }
             onPress={ buttonClickedHandler }
             style={ styles.roundButton2 }>
             <Image style={ styles.button_img } source={ require('../../../assets/imgs/next.png') }/>
           </TouchableOpacity>
         </Animatable.View>
       </>
-    </SafeAreaView>
+    </View>
   )
 }
 
