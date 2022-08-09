@@ -18,39 +18,44 @@ import RNMonthly from "react-native-monthly"
 import ViewShot, { captureRef } from 'react-native-view-shot'
 import Share from 'react-native-share'
 import { AppOpenAdProvider, BannerAd, BannerAdSize, TestIds } from "@react-native-admob/admob"
+import moment from "moment"
 
 const MainScreen = () => {
   const windowWidth = Dimensions.get('window').width
-  const nowDate = new Date().getDate()
   const nowMonth = new Date().getMonth()
   const nowYear = new Date().getFullYear()
-  const nowDay = new Date().getDay()
+  const nowDay = new Date().getDate()
+  const nowTime = new Date().getTime()
   const [perOfDay, setPerOfDay] = useState(0)
   const [perOfBox, setPerOfBox] = useState(0)
   const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
   const [year, setYear] = useState(0)
   const [month, setMonth] = useState(0)
   const [day, setDay] = useState(0)
+  const [date, setDate] = useState<Date>()
   const [splashDismissed, setSplashDismissed] = useState(false)
   const [showInstagramStory, setShowInstagramStory] = useState(false)
+  const _MS_PER_DAY:number = 24 * 60 * 60 * 1000
 
   const setInfos = () => {
     storage
       .load({ key: 'infos' })
       .then(it => {
+        setDate(it.date)
         setPerOfDay(it.perOfDay)
         setPerOfBox(it.perOfBox)
         setPerOfBoxPrice(it.perOfBoxPrice)
         setYear(it.year)
         setMonth(it.month)
         setDay(it.day)
-        console.log('Infos:', it.perOfDay, it.perOfBox, it.perOfBoxPrice)
-        console.log('Dates:', it.year, it.month, it.day)
+        console.log('check:', it.perOfDay, it.perOfBox, it.perOfBoxPrice)
+        console.log('check2:', it)
       })
   }
   const shotRef = React.createRef<ViewShot>()
 
   useEffect(() =>{
+    setSplashDismissed(true)
     setInfos()
     if(Platform.OS === 'ios'){
       Linking.canOpenURL('instagram://').then((val) => setShowInstagramStory(val))
@@ -59,24 +64,13 @@ const MainScreen = () => {
     }
   },[])
 
-  const getMonthOfDayNumber = () => {
-    return new Date(nowYear, nowMonth + 1,0).getDate()
+  const calculateOfCostPerDay = () => {
+    return (perOfBoxPrice * perOfDay) / perOfBox
   }
 
-  const getDifferenceOfDays = () => {
-    return Array.from({ length: nowDate }, (_, i) => i+1)
-  }
-
-  const calculateOfDays = () => {
-    return nowDate
-  }
-
-  const calculateOfBranches = () => {
-    return perOfDay * calculateOfDays()
-  }
-
-  const calculateOfCost = () => {
-    return (perOfDay/perOfBox) * perOfBoxPrice * calculateOfDays()
+  const calculateDays = () => {
+    console.log('kutu',date, perOfBox)
+    return Math.floor((nowTime - date.getTime()) / _MS_PER_DAY)
   }
 
   const takeASnapshot = async () => {
@@ -115,10 +109,13 @@ const MainScreen = () => {
                 <ViewShot ref={ shotRef }>
                   <Image style={ styles.logo } source={ require('../../assets/imgs/logo_new.png') }/>
                   <RNMonthly
+                    itemContainerStyle={ { borderColor: '#f5f5f5' } }
                     numberOfDays={ 30 }
                     activeBackgroundColor="#2c2c2c"
                     inactiveBackgroundColor="#e1e1e1"
-                    activeDays={ [1] }
+                    activeDays={ [day] }
+                    today={ calculateDays() }
+                    todayTextStyle={ { color: '#f5f5f5' } }
                     style={ { width: windowWidth * 0.9 } }
                   />
                   <Animatable.Text style={ styles.anim_text_middle }
@@ -130,9 +127,7 @@ const MainScreen = () => {
                     <Text style={ styles.anim_text_middle }>
                       { I18n.t('branch') }
                     </Text>
-                    <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
-                      { calculateOfBranches() }
-                    </Text>
+                    <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] } />
                   </View>
                   <View style={ styles.text_double }>
                     <Text style={ styles.anim_text_middle }>
@@ -140,7 +135,7 @@ const MainScreen = () => {
                     </Text>
                     <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
                       { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                      { calculateOfCost() + ' ' + I18n.t('currency') }
+                      { ' ' + I18n.t('currency') }
                     </Text>
                   </View>
                   <View style={ styles.text_double }>
@@ -149,7 +144,7 @@ const MainScreen = () => {
                     </Text>
                     <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
                       { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                      { I18n.t('day_day') + ' ' + calculateOfDays() }
+                      { I18n.t('day_day') + ' ' }
                     </Text>
                   </View>
                 </ViewShot>

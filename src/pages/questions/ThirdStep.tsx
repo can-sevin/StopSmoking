@@ -10,19 +10,21 @@ const ThirdStep = (props: any) => {
   const date = new Date()
 
   const buttonClickedHandler = () => {
+    console.log('Click:',perOfBox, date)
     storage.save({
       key: 'infos',
       data: {
         perOfDay: props.route.params.perOfDay,
         perOfBox: perOfBox,
         perOfBoxPrice: props.route.params.perOfBoxPrice,
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        day: date.getDate()
+        date: date
       }
     })
     props.navigation.replace('MainScreen',{
-      perOfDay: props.route.params.perOfDay, perOfBoxPrice: props.route.params.perOfBoxPrice, perOfBox: perOfBox
+      perOfDay: props.route.params.perOfDay,
+      perOfBoxPrice: props.route.params.perOfBoxPrice,
+      perOfBox: perOfBox,
+      date: date
     })
   }
 
