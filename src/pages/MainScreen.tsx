@@ -26,15 +26,16 @@ const MainScreen = () => {
   const nowYear = new Date().getFullYear()
   const nowDay = new Date().getDate()
   const nowTime = new Date().getTime()
-  const [perOfDay, setPerOfDay] = useState(0)
-  const [perOfBox, setPerOfBox] = useState(0)
-  const [perOfBoxPrice, setPerOfBoxPrice] = useState(0)
-  const [year, setYear] = useState(0)
-  const [month, setMonth] = useState(0)
-  const [day, setDay] = useState(0)
-  const [date, setDate] = useState<Date>()
-  const [splashDismissed, setSplashDismissed] = useState(false)
-  const [showInstagramStory, setShowInstagramStory] = useState(false)
+  const [perOfDay, setPerOfDay] = useState<number>(0)
+  const [perOfBox, setPerOfBox] = useState<number>(0)
+  const [perOfBoxPrice, setPerOfBoxPrice] = useState<number>(0)
+  const [year, setYear] = useState<number>(0)
+  const [month, setMonth] = useState<number>(0)
+  const [day, setDay] = useState<number>(0)
+  const [date, setDate] = useState<Date>(new Date())
+  const [time, setTime] = useState<number>(0)
+  const [splashDismissed, setSplashDismissed] = useState<boolean>(false)
+  const [showInstagramStory, setShowInstagramStory] = useState<boolean>(false)
   const _MS_PER_DAY:number = 24 * 60 * 60 * 1000
 
   const setInfos = () => {
@@ -42,6 +43,7 @@ const MainScreen = () => {
       .load({ key: 'infos' })
       .then(it => {
         setDate(it.date)
+        setTime(it.time)
         setPerOfDay(it.perOfDay)
         setPerOfBox(it.perOfBox)
         setPerOfBoxPrice(it.perOfBoxPrice)
@@ -55,8 +57,8 @@ const MainScreen = () => {
   const shotRef = React.createRef<ViewShot>()
 
   useEffect(() =>{
-    setSplashDismissed(true)
     setInfos()
+    setSplashDismissed(true)
     if(Platform.OS === 'ios'){
       Linking.canOpenURL('instagram://').then((val) => setShowInstagramStory(val))
     } else {
@@ -68,9 +70,13 @@ const MainScreen = () => {
     return (perOfBoxPrice * perOfDay) / perOfBox
   }
 
+  const calculateOfBranches = () => {
+    return calculateDays() * perOfDay
+  }
+
   const calculateDays = () => {
-    console.log('kutu',date, perOfBox)
-    return Math.floor((nowTime - date.getTime()) / _MS_PER_DAY)
+    console.log('calculateDays', Math.floor((nowTime - time) / _MS_PER_DAY) + 3)
+    return Math.floor((nowTime - time) / _MS_PER_DAY) + 1
   }
 
   const takeASnapshot = async () => {
@@ -115,7 +121,7 @@ const MainScreen = () => {
                     inactiveBackgroundColor="#e1e1e1"
                     activeDays={ [day] }
                     today={ calculateDays() }
-                    todayTextStyle={ { color: '#f5f5f5' } }
+                    todayTextStyle={ { color: '#020202', fontFamily:'Nunito-Bold',fontSize: 24, textAlign: 'center' } }
                     style={ { width: windowWidth * 0.9 } }
                   />
                   <Animatable.Text style={ styles.anim_text_middle }
@@ -127,7 +133,9 @@ const MainScreen = () => {
                     <Text style={ styles.anim_text_middle }>
                       { I18n.t('branch') }
                     </Text>
-                    <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] } />
+                    <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
+                      { calculateOfBranches() }
+                    </Text>
                   </View>
                   <View style={ styles.text_double }>
                     <Text style={ styles.anim_text_middle }>
@@ -135,7 +143,7 @@ const MainScreen = () => {
                     </Text>
                     <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
                       { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                      { ' ' + I18n.t('currency') }
+                      { calculateDays() * calculateOfCostPerDay() + ' ' + I18n.t('currency') }
                     </Text>
                   </View>
                   <View style={ styles.text_double }>
@@ -144,7 +152,7 @@ const MainScreen = () => {
                     </Text>
                     <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
                       { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                      { I18n.t('day_day') + ' ' }
+                      { calculateDays() + '.' + I18n.t('day_day') + ' ' }
                     </Text>
                   </View>
                 </ViewShot>

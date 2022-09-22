@@ -17,7 +17,8 @@ const ThirdStep = (props: any) => {
         perOfDay: props.route.params.perOfDay,
         perOfBox: perOfBox,
         perOfBoxPrice: props.route.params.perOfBoxPrice,
-        date: date
+        date: date,
+        time: date.getTime()
       }
     })
     props.navigation.replace('MainScreen',{
