@@ -19,6 +19,7 @@ import ViewShot, { captureRef } from 'react-native-view-shot'
 import Share from 'react-native-share'
 import { AppOpenAdProvider, BannerAd, BannerAdSize, TestIds } from "@react-native-admob/admob"
 import moment from "moment"
+import PushNotificationIOS from "@react-native-community/push-notification-ios"
 
 const MainScreen = () => {
   const windowWidth = Dimensions.get('window').width
@@ -34,6 +35,7 @@ const MainScreen = () => {
   const [day, setDay] = useState<number>(0)
   const [date, setDate] = useState<Date>(new Date())
   const [time, setTime] = useState<number>(0)
+  const [permissions, setPermissions] = useState({})
   const [splashDismissed, setSplashDismissed] = useState<boolean>(false)
   const [showInstagramStory, setShowInstagramStory] = useState<boolean>(false)
   const _MS_PER_DAY:number = 24 * 60 * 60 * 1000
@@ -61,6 +63,7 @@ const MainScreen = () => {
     setSplashDismissed(true)
     if(Platform.OS === 'ios'){
       Linking.canOpenURL('instagram://').then((val) => setShowInstagramStory(val))
+      sendNotificationIos()
     } else {
       Share.isPackageInstalled('com.instagram.android').then(({ isInstalled }) => setShowInstagramStory(isInstalled))
     }
@@ -71,12 +74,37 @@ const MainScreen = () => {
   }
 
   const calculateOfBranches = () => {
-    return calculateDays() * perOfDay
+    return (calculateDays() - 1) * perOfDay
   }
 
   const calculateDays = () => {
-    console.log('calculateDays', Math.floor((nowTime - time) / _MS_PER_DAY) + 3)
     return Math.floor((nowTime - time) / _MS_PER_DAY) + 1
+  }
+
+  const calculateActiveDays = () => {
+    return Array.from({ length: calculateDays() - 1 }, (_, index) => index + 1)
+  }
+
+  const sendNotificationIos = () => {
+    PushNotificationIOS.checkPermissions(callback => {
+      callback.alert === false ? PushNotificationIOS.requestPermissions({
+        alert: true,
+        badge: true,
+        sound: true,
+        critical: true
+      }).then(() => {
+        PushNotificationIOS.addNotificationRequest({
+          id: '1',
+          title: 'test',
+          body: 'test'
+        })
+      }) :
+        PushNotificationIOS.addNotificationRequest({
+          id: '1',
+          title: 'test',
+          body: 'test'
+        })
+    })
   }
 
   const takeASnapshot = async () => {
@@ -119,7 +147,7 @@ const MainScreen = () => {
                     numberOfDays={ 30 }
                     activeBackgroundColor="#2c2c2c"
                     inactiveBackgroundColor="#e1e1e1"
-                    activeDays={ [day] }
+                    activeDays={ calculateActiveDays() }
                     today={ calculateDays() }
                     todayTextStyle={ { color: '#020202', fontFamily:'Nunito-Bold',fontSize: 24, textAlign: 'center' } }
                     style={ { width: windowWidth * 0.9 } }
@@ -143,7 +171,7 @@ const MainScreen = () => {
                     </Text>
                     <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
                       { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                      { calculateDays() * calculateOfCostPerDay() + ' ' + I18n.t('currency') }
+                      { (calculateDays() - 1) * calculateOfCostPerDay() + ' ' + I18n.t('currency') }
                     </Text>
                   </View>
                   <View style={ styles.text_double }>
@@ -152,7 +180,7 @@ const MainScreen = () => {
                     </Text>
                     <Text style={ [styles.anim_text_middle, styles.anim_text_middle_semi] }>
                       { /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */ }
-                      { calculateDays() + '.' + I18n.t('day_day') + ' ' }
+                      { (calculateDays() - 1) + ' ' + I18n.t('day_day') + ' ' }
                     </Text>
                   </View>
                 </ViewShot>

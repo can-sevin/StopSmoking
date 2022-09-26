@@ -50,6 +50,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = StopSmoking/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ABB4513E708042D4A1D04472 /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-SemiBold.ttf"; path = "../assets/fonts/Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
 		AD8431B80A4F4370BC1487EA /* Nunito-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Regular.ttf"; path = "../assets/fonts/Nunito-Regular.ttf"; sourceTree = "<group>"; };
+		BE287C0A28DF524300BAE6A9 /* StopSmoking.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = StopSmoking.entitlements; path = StopSmoking/StopSmoking.entitlements; sourceTree = "<group>"; };
 		D38A9123B0AE95684BC0E376 /* Pods-StopSmoking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StopSmoking.release.xcconfig"; path = "Target Support Files/Pods-StopSmoking/Pods-StopSmoking.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -94,6 +95,7 @@
 		13B07FAE1A68108700A75B9A /* StopSmoking */ = {
 			isa = PBXGroup;
 			children = (
+				BE287C0A28DF524300BAE6A9 /* StopSmoking.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -521,6 +523,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = StopSmoking/StopSmoking.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4Q9W84AXYS;
 				ENABLE_BITCODE = NO;
@@ -548,6 +551,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = StopSmoking/StopSmoking.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4Q9W84AXYS;
 				INFOPLIST_FILE = StopSmoking/Info.plist;
