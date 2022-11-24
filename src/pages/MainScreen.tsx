@@ -8,7 +8,7 @@ import {
   Platform,
   Linking,
   Image,
-  StatusBar
+  StatusBar, ScrollView
 } from "react-native"
 import I18n from "../lang/_i18n"
 import * as Animatable from "react-native-animatable"
@@ -18,8 +18,8 @@ import RNMonthly from "react-native-monthly"
 import ViewShot, { captureRef } from 'react-native-view-shot'
 import Share from 'react-native-share'
 import { AppOpenAdProvider, BannerAd, BannerAdSize, TestIds } from "@react-native-admob/admob"
-import moment from "moment"
 import PushNotificationIOS from "@react-native-community/push-notification-ios"
+import PushNotification from "react-native-push-notification"
 
 const MainScreen = () => {
   const windowWidth = Dimensions.get('window').width
@@ -63,8 +63,9 @@ const MainScreen = () => {
     setSplashDismissed(true)
     if(Platform.OS === 'ios'){
       Linking.canOpenURL('instagram://').then((val) => setShowInstagramStory(val))
-      sendNotificationIos()
+      // sendNotificationIos()
     } else {
+      // sendNotificationAndroid()
       Share.isPackageInstalled('com.instagram.android').then(({ isInstalled }) => setShowInstagramStory(isInstalled))
     }
   },[])
@@ -83,6 +84,25 @@ const MainScreen = () => {
 
   const calculateActiveDays = () => {
     return Array.from({ length: calculateDays() - 1 }, (_, index) => index + 1)
+  }
+
+  const sendNotificationAndroid = () => {
+    PushNotification.createChannel(
+      {
+        channelId: "specialid", // (required)
+        channelName: "Special messasge", // (required)
+        channelDescription: "Notification for special message", // (optional) default: undefined.
+        importance: 4, // (optional) default: 4. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+      },
+      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    )
+
+    PushNotification.localNotification({
+      channelId:'specialid',
+      title: 'Test',
+      message: 'Test Message',
+    })
   }
 
   const sendNotificationIos = () => {
@@ -130,9 +150,9 @@ const MainScreen = () => {
   }
 
   return (
-    <>
+    <View style={ { flex: 1 } }>
       <StatusBar translucent backgroundColor="transparent" />
-      <View style={ styles.top_container }>
+      <ScrollView style={ styles.top_container } contentContainerStyle={ { flexGrow: 1 } }>
         <AppOpenAdProvider
           unitId={ TestIds.APP_OPEN }
           options={ { showOnColdStart: true, loadOnDismissed: splashDismissed } }
@@ -141,7 +161,7 @@ const MainScreen = () => {
             { splashDismissed ? (
               <LinearGradient colors={ ['#393E46','#222831'] } style={ styles.container }>
                 <ViewShot ref={ shotRef }>
-                  <Image style={ styles.logo } source={ require('../../assets/imgs/logo_new.png') }/>
+                  <Image style={ styles.logo } source={ require('../../assets/imgs/logo.png') }/>
                   <RNMonthly
                     itemContainerStyle={ { borderColor: '#f5f5f5' } }
                     numberOfDays={ 30 }
@@ -193,14 +213,14 @@ const MainScreen = () => {
               </LinearGradient> ) : (setSplashDismissed(true)) }
           </>
         </AppOpenAdProvider>
-      </View>
-    </>
+      </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   top_container: {
-    flex: 1
+    flex: 1,
   },
   container: {
     flex: 1,

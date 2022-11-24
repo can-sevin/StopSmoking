@@ -12,6 +12,12 @@ const en = {
   day: 'How many days have passed?',
   day_day: 'Day',
   branch_branch: 'Branch',
-  share: 'Share'
+  share: 'Share',
+  later20min:'Congratulations, your blood pressure and heart rate are back to normal',
+  later8hr:'Congratulations, your blood oxygen level is back to normal',
+  later24hr: 'Congratulations, your body is carbon monoxide free',
+  later48hr: 'Congratulations, your blood nicotine level has decreased, your sense of taste and smell has increased',
+  later72hr: 'Congratulations, breathing has become easier as your airways have relaxed',
+  later2w: 'Congratulations, circulation in the whole body has improved, now you will feel less tired and clogged while walking',
 }
 export default en

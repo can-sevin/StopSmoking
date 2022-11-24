@@ -12,6 +12,12 @@ const tr = {
   day: 'Kaç gün geçti?',
   day_day: 'Gün',
   branch_branch: 'Dal',
-  share: 'Paylaş'
+  share: 'Paylaş',
+  later20min:'Tebrikler, kan basıncı ve nabızınız normale döndü',
+  later8hr:'Tebrikler, kan oksijen düzeyiniz normale döndü',
+  later24hr: 'Tebrikler, vücudunuz karbonmonoksitten arındı',
+  later48hr: 'Tebrikler, kandaki nikotin düzeyiniz azaldı, tat ve koku duyunuz arttı',
+  later72hr: 'Tebrikler, hava yollarınızın gevşemesi sonucu nefes alıp verme rahatladı',
+  later2w: 'Tebrikler, tüm vücuttaki dolaşım düzeldi, artık yürürken yorulmanız ve tıkanmanız daha az görülülecek',
 }
 export default tr
