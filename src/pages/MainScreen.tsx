@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   Dimensions,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   Platform,
   Linking,
   Image,
-  StatusBar, ScrollView
+  StatusBar, ScrollView, Animated
 } from "react-native"
 import I18n from "../lang/_i18n"
 import * as Animatable from "react-native-animatable"
@@ -36,9 +36,15 @@ const MainScreen = () => {
   const [date, setDate] = useState<Date>(new Date())
   const [time, setTime] = useState<number>(0)
   const [permissions, setPermissions] = useState({})
+  const [textAchievement, setTextAchievement] = useState<string[]>([])
+  const [textAchievementIndex, setTextAchievementIndex] = useState<number>(0)
+  const [textAchievementAnim, setTextAchievementAnim] = useState<boolean>(true)
   const [splashDismissed, setSplashDismissed] = useState<boolean>(false)
   const [showInstagramStory, setShowInstagramStory] = useState<boolean>(false)
   const _MS_PER_DAY:number = 24 * 60 * 60 * 1000
+  const _MS_PER_HOUR:number = 60 * 60 * 1000
+  const _MS_PER_MIN:number = 60 * 1000
+  const textAchievementsRef = useRef(new Animated.Value(0)).current
 
   const setInfos = () => {
     storage
@@ -68,7 +74,17 @@ const MainScreen = () => {
       // sendNotificationAndroid()
       Share.isPackageInstalled('com.instagram.android').then(({ isInstalled }) => setShowInstagramStory(isInstalled))
     }
+    fadeIn()
+    prepareAchievementText()
   },[])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTextAchievementAnim(!textAchievementAnim)
+      textAchievementAnim ? fadeIn() : fadeOut()
+    }, 4000)
+    return () => clearInterval(interval)
+  })
 
   const calculateOfCostPerDay = () => {
     return (perOfBoxPrice * perOfDay) / perOfBox
@@ -78,8 +94,16 @@ const MainScreen = () => {
     return (calculateDays() - 1) * perOfDay
   }
 
-  const calculateDays = () => {
+  const calculateDays = () : number => {
     return Math.floor((nowTime - time) / _MS_PER_DAY) + 1
+  }
+
+  const calculateMin = () : number => {
+    return Math.floor(((nowTime - time) / _MS_PER_MIN)) + 1
+  }
+
+  const calculateHour = () : number => {
+    return Math.floor(((nowTime - time) / _MS_PER_HOUR)) + 1
   }
 
   const calculateActiveDays = () => {
@@ -90,7 +114,7 @@ const MainScreen = () => {
     PushNotification.createChannel(
       {
         channelId: "specialid", // (required)
-        channelName: "Special messasge", // (required)
+        channelName: "Special message", // (required)
         channelDescription: "Notification for special message", // (optional) default: undefined.
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
@@ -149,6 +173,47 @@ const MainScreen = () => {
     }
   }
 
+  const prepareAchievementText = () => {
+    const hr:number = calculateHour()
+    const min:number = calculateMin()
+    switch (true) {
+    case (hr >= 336):
+      setTextAchievement(['later20min', 'later8hr', 'later24hr', 'later48hr', 'later72hr', 'later2w'])
+      break
+    case (hr >= 72):
+      setTextAchievement(['later20min', 'later8hr', 'later24hr', 'later48hr', 'later72hr'])
+      break
+    case (hr >= 48):
+      setTextAchievement(['later20min', 'later8hr', 'later24hr', 'later48hr'])
+      break
+    case (hr >= 24):
+      setTextAchievement(['later20min', 'later8hr', 'later24hr'])
+      break
+    case (hr >= 8):
+      setTextAchievement(['later20min', 'later8hr'])
+      break
+    case (min >= 20):
+      setTextAchievement(['later20min'])
+      break
+    }
+  }
+
+  const fadeIn = () => {
+    Animated.timing(textAchievementsRef, {
+      toValue: 1, useNativeDriver: false,
+      duration: 2000
+    }).start()
+    const num = Math.floor(Math.random() * textAchievement.length)
+    setTextAchievementIndex(num)
+  }
+
+  const fadeOut = () => {
+    Animated.timing(textAchievementsRef, {
+      toValue: 0, useNativeDriver: false,
+      duration: 2000
+    }).start()
+  }
+
   return (
     <View style={ { flex: 1 } }>
       <StatusBar translucent backgroundColor="transparent" />
@@ -203,6 +268,11 @@ const MainScreen = () => {
                       { (calculateDays() - 1) + ' ' + I18n.t('day_day') + ' ' }
                     </Text>
                   </View>
+                  <View style={ styles.text_double_achievements }>
+                    <Animated.Text style={ [styles.anim_text_achievements,{ opacity: textAchievementsRef }] }>
+                      { I18n.t(textAchievement[textAchievementIndex]) }
+                    </Animated.Text>
+                  </View>
                 </ViewShot>
                 <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={ TestIds.BANNER } />
                 <TouchableOpacity onPress={ takeASnapshot }>
@@ -238,6 +308,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     alignSelf: 'center',
   },
+  anim_text_achievements:{
+    fontSize: 15,
+    color: '#f5f5f5',
+    marginLeft: 20,
+    marginVertical: 8,
+    textAlign: 'center',
+    fontFamily: 'Nunito-Regular',
+    alignSelf: 'center',
+  },
   anim_text_middle_semi:{
     fontFamily: 'Nunito-SemiBold'
   },
@@ -252,6 +331,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     paddingEnd: 16
+  },
+  text_double_achievements:{
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    paddingEnd: 16,
+    height: 60,
+    marginHorizontal: 8
   },
   banner:{
     alignSelf: 'center',
