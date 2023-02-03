@@ -5,7 +5,7 @@ import Video from "react-native-video"
 
 const OnBoarding = (props:any) => {
   const buttonClickedHandler = () => {
-    props.navigation.navigate('FirstStep')
+    props.navigation.navigate('FirstNicotineStep')
   }
 
   return (

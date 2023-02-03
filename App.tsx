@@ -9,6 +9,7 @@ import ThirdStep from "./src/pages/questions/ThirdStep"
 import MainScreen from "./src/pages/MainScreen"
 import Storage from 'react-native-storage'
 import AsyncStorage from '@react-native-community/async-storage'
+import FirstNicotineStep from "./src/pages/questions/FirstNicotineStep";
 
 const Stack = createNativeStackNavigator()
 export const storage = new Storage({
@@ -32,6 +33,7 @@ const App = () => {
           <Stack.Screen name="FirstStep" component={ FirstStep } />
           <Stack.Screen name="SecondStep" component={ SecondStep } />
           <Stack.Screen name="ThirdStep" component={ ThirdStep } />
+          <Stack.Screen name="FirstNicotineStep" component={ FirstNicotineStep } />
           <Stack.Screen name="MainScreen" component={ MainScreen } />
         </Stack.Navigator>
       </>

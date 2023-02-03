@@ -27,12 +27,29 @@ const FirstNicotineStep = (props: any) => {
         <>
           <Animatable.View animation='bounceInDown' style={ styles.inside_container }>
             <Text style={ styles.anim_text_middle }>
-              { I18n.t('first_question') }
+              { I18n.t('first_nicotine_question') }
             </Text>
             <View>
-              <TextInput placeholderTextColor={ '#f5f5f5' } selectionColor={ '#f5f5f5' } placeholder='__' autoFocus={ true }
-                maxLength={ 2 } keyboardType={ "number-pad" }
-                style={ styles.inputText } onChangeText={ (val) => setPerOfDay(parseInt(val, 10)) }/>
+              <TouchableOpacity style={ styles.touchable_option } >
+                <Text style={ styles.anim_text_option }>
+                  { I18n.t('first_nicotine_question_a') }
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={ styles.touchable_option }>
+                <Text style={ styles.anim_text_option }>
+                  { I18n.t('first_nicotine_question_b') }
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={ styles.touchable_option }>
+                <Text style={ styles.anim_text_option }>
+                  { I18n.t('first_nicotine_question_c') }
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={ styles.touchable_option }>
+                <Text style={ styles.anim_text_option }>
+                  { I18n.t('first_nicotine_question_d') }
+                </Text>
+              </TouchableOpacity>
             </View>
             <TouchableOpacity
               disabled={ perOfDay === 0 }
@@ -76,6 +93,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     alignSelf: 'center',
   },
+  anim_text_option:{
+    fontSize: 20,
+    color: '#f5f5f5',
+    marginLeft: 20,
+    textAlign: 'center',
+    alignContent: 'center',
+    marginHorizontal: 8,
+    marginVertical: 12,
+    fontFamily: 'Nunito-Bold',
+    alignSelf: 'center',
+  },
   roundButton2: {
     margin: 20,
     width: 56,
@@ -93,6 +121,10 @@ const styles = StyleSheet.create({
     height: 36,
     width: 36
   },
+  touchable_option:{
+    alignSelf: 'center',
+    width: '80%'
+  },
   inputText:{
     marginVertical: 12,
     fontSize: 40,
@@ -106,4 +138,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   }
 })
-export default FirstStep
+export default FirstNicotineStep
