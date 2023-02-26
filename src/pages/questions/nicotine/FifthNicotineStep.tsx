@@ -1,15 +1,11 @@
 import React, { useState } from "react"
 import { Image, Text, StyleSheet, TextInput, TouchableOpacity, View, StatusBar } from "react-native"
 import * as Animatable from 'react-native-animatable'
-import I18n from '../../lang/_i18n'
+import I18n from '../../../lang/_i18n'
 import Video from "react-native-video"
 
-const FirstNicotineStep = (props: any) => {
-  const [perOfDay, setPerOfDay] = useState(0)
-
-  const buttonClickedHandler = () => {
-    // props.navigation.navigate('SecondStep',{ perOfDay: perOfDay })
-  }
+const FifthNicotineStep = (props: any) => {
+  const point : number = props.route.params.point
 
   return (
     <>
@@ -21,42 +17,26 @@ const FirstNicotineStep = (props: any) => {
             resizeMode={ 'cover' }
             style={ styles.video }
             muted
-            source={ require('../../../assets/imgs/pexels.mp4') }
+            source={ require('../../../../assets/imgs/pexels.mp4') }
           />
         </>
         <>
           <Animatable.View animation='bounceInDown' style={ styles.inside_container }>
             <Text style={ styles.anim_text_middle }>
-              { I18n.t('first_nicotine_question') }
+              { I18n.t('fifth_nicotine_question') }
             </Text>
             <View>
-              <TouchableOpacity style={ styles.touchable_option } >
+              <TouchableOpacity style={ styles.touchable_option } onPress={ () => props.navigation.navigate('SixthNicotineStep',{ point: point + 1 }) }>
                 <Text style={ styles.anim_text_option }>
-                  { I18n.t('first_nicotine_question_a') }
+                  { I18n.t('fifth_nicotine_question_a') }
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={ styles.touchable_option }>
+              <TouchableOpacity style={ styles.touchable_option } onPress={ () => props.navigation.navigate('SixthNicotineStep',{ point: point }) }>
                 <Text style={ styles.anim_text_option }>
-                  { I18n.t('first_nicotine_question_b') }
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={ styles.touchable_option }>
-                <Text style={ styles.anim_text_option }>
-                  { I18n.t('first_nicotine_question_c') }
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={ styles.touchable_option }>
-                <Text style={ styles.anim_text_option }>
-                  { I18n.t('first_nicotine_question_d') }
+                  { I18n.t('fifth_nicotine_question_b') }
                 </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              disabled={ perOfDay === 0 }
-              onPress={ buttonClickedHandler }
-              style={ styles.roundButton2 }>
-              <Image style={ styles.button_img } source={ require('../../../assets/imgs/next.png') }/>
-            </TouchableOpacity>
           </Animatable.View>
         </>
       </View>
@@ -138,4 +118,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   }
 })
-export default FirstNicotineStep
+export default FifthNicotineStep

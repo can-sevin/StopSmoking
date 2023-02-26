@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import OnBoarding from "./src/pages/OnBoarding"
 import SplashScreen from "./src/pages/SplashScreen"
 import { NavigationContainer } from "@react-navigation/native"
@@ -9,7 +9,12 @@ import ThirdStep from "./src/pages/questions/ThirdStep"
 import MainScreen from "./src/pages/MainScreen"
 import Storage from 'react-native-storage'
 import AsyncStorage from '@react-native-community/async-storage'
-import FirstNicotineStep from "./src/pages/questions/FirstNicotineStep";
+import FirstNicotineStep from "./src/pages/questions/nicotine/FirstNicotineStep";
+import SecondNicotineStep from "./src/pages/questions/nicotine/SecondNicotineStep";
+import ThirdNicotineStep from "./src/pages/questions/nicotine/ThirdNicotineStep";
+import ForthNicotineStep from "./src/pages/questions/nicotine/ForthNicotineStep";
+import FifthNicotineStep from "./src/pages/questions/nicotine/FifthNicotineStep";
+import SixthNicotineStep from "./src/pages/questions/nicotine/SixthNicotineStep";
 
 const Stack = createNativeStackNavigator()
 export const storage = new Storage({
@@ -34,6 +39,11 @@ const App = () => {
           <Stack.Screen name="SecondStep" component={ SecondStep } />
           <Stack.Screen name="ThirdStep" component={ ThirdStep } />
           <Stack.Screen name="FirstNicotineStep" component={ FirstNicotineStep } />
+          <Stack.Screen name="SecondNicotineStep" component={ SecondNicotineStep } />
+          <Stack.Screen name="ThirdNicotineStep" component={ ThirdNicotineStep } />
+          <Stack.Screen name="ForthNicotineStep" component={ ForthNicotineStep } />
+          <Stack.Screen name="FifthNicotineStep" component={ FifthNicotineStep } />
+          <Stack.Screen name="SixthNicotineStep" component={ SixthNicotineStep } />
           <Stack.Screen name="MainScreen" component={ MainScreen } />
         </Stack.Navigator>
       </>
