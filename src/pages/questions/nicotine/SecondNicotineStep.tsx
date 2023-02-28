@@ -84,38 +84,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     alignSelf: 'center',
   },
-  roundButton2: {
-    margin: 20,
-    width: 56,
-    height: 56,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    padding: 10,
-    borderColor: '#323232',
-    borderWidth: 0.2,
-    borderRadius: 100,
-    backgroundColor: '#f5f5f5',
-  },
-  button_img:{
-    height: 36,
-    width: 36
-  },
   touchable_option:{
     alignSelf: 'center',
     width: '80%'
   },
-  inputText:{
-    marginVertical: 12,
-    fontSize: 40,
-    minWidth: 64,
-    minHeight: 64,
-    lineHeight: 64,
-    padding: 10,
-    fontFamily: 'Nunito-Bold',
-    color: '#f5f5f5',
-    alignSelf: 'center',
-    textAlign: 'center',
-  }
 })
 export default SecondNicotineStep

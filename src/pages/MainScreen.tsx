@@ -110,9 +110,10 @@ const MainScreen = () => {
     return Array.from({ length: calculateDays() - 1 }, (_, index) => index + 1)
   }
 
-  const sendNotificationAndroid = () => {
+  const sendNotificationAndroid = (name, message) => {
     PushNotification.createChannel(
       {
+        requestPermissions: true,
         channelId: "specialid", // (required)
         channelName: "Special message", // (required)
         channelDescription: "Notification for special message", // (optional) default: undefined.
@@ -124,12 +125,12 @@ const MainScreen = () => {
 
     PushNotification.localNotification({
       channelId:'specialid',
-      title: 'Test',
-      message: 'Test Message',
+      title: name,
+      message: message,
     })
   }
 
-  const sendNotificationIos = () => {
+  const sendNotificationIos = (name, message) => {
     PushNotificationIOS.checkPermissions(callback => {
       callback.alert === false ? PushNotificationIOS.requestPermissions({
         alert: true,
@@ -139,16 +140,19 @@ const MainScreen = () => {
       }).then(() => {
         PushNotificationIOS.addNotificationRequest({
           id: '1',
-          title: 'test',
-          body: 'test'
+          title: name,
+          body: message
         })
-      }) :
-        PushNotificationIOS.addNotificationRequest({
-          id: '1',
-          title: 'test',
-          body: 'test'
-        })
+      }) : null
     })
+  }
+
+  const sendNotications = (name, message) => {
+    if(Platform.OS === 'ios'){
+      sendNotificationIos(name,message)
+    } else {
+      sendNotificationAndroid(name,message)
+    }
   }
 
   const takeASnapshot = async () => {
@@ -179,21 +183,30 @@ const MainScreen = () => {
     switch (true) {
     case (hr >= 336):
       setTextAchievement(['later20min', 'later8hr', 'later24hr', 'later48hr', 'later72hr', 'later2w'])
+      sendNotications('Tebrikler', textAchievement[5])
       break
     case (hr >= 72):
       setTextAchievement(['later20min', 'later8hr', 'later24hr', 'later48hr', 'later72hr'])
+      sendNotications('Tebrikler', textAchievement[4])
       break
     case (hr >= 48):
       setTextAchievement(['later20min', 'later8hr', 'later24hr', 'later48hr'])
+      sendNotications('Tebrikler', textAchievement[3])
       break
     case (hr >= 24):
       setTextAchievement(['later20min', 'later8hr', 'later24hr'])
+      sendNotications('Tebrikler', textAchievement[2])
       break
     case (hr >= 8):
       setTextAchievement(['later20min', 'later8hr'])
+      sendNotications('Tebrikler', textAchievement[1])
       break
     case (min >= 20):
       setTextAchievement(['later20min'])
+      sendNotications('Tebrikler', textAchievement[0])
+      break
+    default:
+      sendNotications('welcome','welcome')
       break
     }
   }
