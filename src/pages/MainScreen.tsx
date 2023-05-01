@@ -46,12 +46,12 @@ const MainScreen = () => {
   const _MS_PER_MIN:number = 60 * 1000
   const textAchievementsRef = useRef(new Animated.Value(0)).current
 
-  const setInfos = () => {
-    storage
+  const setInfos = async () => {
+    await storage
       .load({ key: 'infos' })
       .then(it => {
-        setDate(it.date)
         setTime(it.time)
+        setDate(it.date)
         setPerOfDay(it.perOfDay)
         setPerOfBox(it.perOfBox)
         setPerOfBoxPrice(it.perOfBoxPrice)
@@ -64,18 +64,17 @@ const MainScreen = () => {
   }
   const shotRef = React.createRef<ViewShot>()
 
-  useEffect(() =>{
-    setInfos()
-    setSplashDismissed(true)
-    if(Platform.OS === 'ios'){
-      Linking.canOpenURL('instagram://').then((val) => setShowInstagramStory(val))
-      // sendNotificationIos()
-    } else {
-      // sendNotificationAndroid()
-      Share.isPackageInstalled('com.instagram.android').then(({ isInstalled }) => setShowInstagramStory(isInstalled))
-    }
-    fadeIn()
-    prepareAchievementText()
+  useEffect(() => {
+    setInfos().then(r =>{
+      setSplashDismissed(true)
+      if (Platform.OS === 'ios') {
+        Linking.canOpenURL('instagram://').then((val) => setShowInstagramStory(val))
+      } else {
+        Share.isPackageInstalled('com.instagram.android').then(({ isInstalled }) => setShowInstagramStory(isInstalled))
+      }
+      fadeIn()
+      prepareAchievementText()
+    })
   },[])
 
   useEffect(() => {
@@ -113,16 +112,12 @@ const MainScreen = () => {
   const sendNotificationAndroid = (name, message) => {
     PushNotification.createChannel(
       {
-        requestPermissions: true,
         channelId: "specialid", // (required)
         channelName: "Special message", // (required)
         channelDescription: "Notification for special message", // (optional) default: undefined.
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
-      },
-      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-    )
-
+      })
     PushNotification.localNotification({
       channelId:'specialid',
       title: name,
@@ -180,6 +175,7 @@ const MainScreen = () => {
   const prepareAchievementText = () => {
     const hr:number = calculateHour()
     const min:number = calculateMin()
+    console.log('Saat',hr,min)
     switch (true) {
     case (hr >= 336):
       setTextAchievement(['later20min', 'later8hr', 'later24hr', 'later48hr', 'later72hr', 'later2w'])
@@ -197,16 +193,18 @@ const MainScreen = () => {
       setTextAchievement(['later20min', 'later8hr', 'later24hr'])
       sendNotications('Tebrikler', textAchievement[2])
       break
-    case (hr >= 8):
+    case (hr >= 2):
       setTextAchievement(['later20min', 'later8hr'])
       sendNotications('Tebrikler', textAchievement[1])
       break
     case (min >= 20):
       setTextAchievement(['later20min'])
       sendNotications('Tebrikler', textAchievement[0])
+      console.log('setTextAchievement',textAchievement)
       break
     default:
       sendNotications('welcome','welcome')
+      console.log('setTextAchievement',textAchievement)
       break
     }
   }
@@ -232,8 +230,8 @@ const MainScreen = () => {
       <StatusBar translucent backgroundColor="transparent" />
       <ScrollView style={ styles.top_container } contentContainerStyle={ { flexGrow: 1 } }>
         <AppOpenAdProvider
-          unitId={ TestIds.APP_OPEN }
-          options={ { showOnColdStart: true, loadOnDismissed: splashDismissed } }
+          unitId={'ca-app-pub-2210071155853586/5814652669'}
+          options={{ showOnColdStart: true, loadOnDismissed: splashDismissed }}
         >
           <>
             { splashDismissed ? (
@@ -287,7 +285,7 @@ const MainScreen = () => {
                     </Animated.Text>
                   </View>
                 </ViewShot>
-                <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={ TestIds.BANNER } />
+                <BannerAd style={ styles.banner } size={ BannerAdSize.BANNER } unitId={'ca-app-pub-2210071155853586/4960558385'} />
                 <TouchableOpacity onPress={ takeASnapshot }>
                   <Text style={ styles.anim_text_middle_big_semi }>
                     { showInstagramStory ? 'Instagram Story ' + I18n.t('share') :I18n.t('share') }

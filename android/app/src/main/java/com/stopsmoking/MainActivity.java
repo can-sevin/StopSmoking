@@ -1,5 +1,6 @@
 package com.mahmutcansevin.stopsmoking;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
@@ -16,6 +17,11 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "StopSmoking";
+  }
+
+  @Override
+  public void onNewIntent(Intent intent) {
+     super.onNewIntent(intent);
   }
 
   protected void onCreate(Bundle savedInstanceState) {
