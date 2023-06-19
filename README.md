@@ -26,8 +26,8 @@ You can start with yarn install command after that you can use yarn android | ya
 
 ## Usage
 
-| Screenshot | Description |
-|------------|-------------|
+| Screenshots|
+|------------|
 | ![Screenshot_1683788005](https://github.com/can-sevin/StopSmoking/assets/11235344/7b408e8e-e6b9-4601-9142-74b87987f0e1)
 | ![Screenshot_1683788784](https://github.com/can-sevin/StopSmoking/assets/11235344/24365b07-9049-474a-8e64-118b3c6d08fa)
 | ![Screenshot_1683788788](https://github.com/can-sevin/StopSmoking/assets/11235344/31bf9c5c-80d3-40b6-b811-b3cc6245f4f6)
