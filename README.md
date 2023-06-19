@@ -40,4 +40,4 @@ Just my imagination 🌈
 
 Specify the license under which your project is distributed. For example:
 
-This project is licensed under the [MIT License](https://sites.google.com/view/stopsmokingprivacypolicy/ana-sayfa)https://sites.google.com/view/stopsmokingprivacypolicy/ana-sayfa).
+This project is licensed under the [MIT License](https://sites.google.com/view/stopsmokingprivacypolicy/ana-sayfa).
