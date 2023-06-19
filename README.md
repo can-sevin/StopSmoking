@@ -34,7 +34,7 @@ You can start with yarn install command after that you can use yarn android | ya
 
 ## Contributing
 
-Just my imagination 🌈
+My imagination 🌈
 
 ## License
 
