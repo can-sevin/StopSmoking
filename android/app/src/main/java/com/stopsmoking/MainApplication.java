@@ -1,14 +1,11 @@
-package com.mahmutcansevin.stopsmoking;
+package com.stopsmoking;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.facebook.react.BuildConfig;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import fr.greweb.reactnativeviewshot.RNViewShotPackage;
-import cl.json.RNSharePackage;
-import fr.greweb.reactnativeviewshot.RNViewShotPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
